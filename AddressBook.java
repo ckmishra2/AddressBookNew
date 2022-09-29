@@ -105,6 +105,29 @@ public class AddressBook {
 		}
 	}
 
+	void SearchByState(String state) {// using predicate function from java streams for person belongs to state
+		List<String> NameFound = new ArrayList<String>();
+		Predicate<String> isSameState = pstate -> pstate.equals(state);
+		LLPA.stream().forEach(LLPA -> {
+			if (isSameState.test(LLPA.state)) {
+				NameFound.add(LLPA.firstName);
+			}
+		});
+		System.out.println("Persons with same state name are" + NameFound);
+	}
+
+	void SearchByCity(String city) { // using predicate function from java streams for person belongs to city
+		List<String> NameFound = new ArrayList<String>();
+		Predicate<String> isSameCity = pCity -> pCity.equals(city);
+		LLPA.stream().forEach(LLPA -> {
+			if (isSameCity.test(LLPA.city)) {
+				NameFound.add(LLPA.firstName);
+			}
+		});
+		System.out.println("Persons with same city are" + NameFound);
+
+	}
+
 //delete the person details 
 	void deleteAddress() {
 		Scanner sc = new Scanner(System.in);
@@ -168,32 +191,40 @@ public class AddressBook {
 				i++;
 			}
 
-			boolean bFound = false;
-			while (!bFound) {
-				System.out.println("Enter the name of Address book to be modified ");
+			boolean bMod = false;
+			while (!bMod) {
+				System.out.println("Do you want to modify Address books");
+				bMod = !sc.nextBoolean();
+				System.out.println("Enter the name of Address book to be modified");
 				String AddBookToBeMod = sc.next();
 				for (int k = 0; k < LLAB.size(); k++) {
-
 					if (LLAB.get(k).nameAB.equals(AddBookToBeMod)) {
-
-						if (LLAB.get(k).nameAB.equals(AddBookToBeMod)) {
-
-							bFound = true;
-							LLAB.get(k).deleteAddress();
-							break;
-						}
+						LLAB.get(k).deleteAddress();
+						break;
 					}
 				}
 			}
 			for (int k = 0; k < LLAB.size(); k++) {
-
 				System.out.println("Address book========" + LLAB.get(k).nameAB);
-
-				System.out.println("Address book========" + LLAB.get(k).nameAB);
-
 				LLAB.get(k).printDetails();
 			}
-
+			// Searching by state or city
+			String city, state;
+			System.out.println("Enter 1 to search by city./n 2 to search by state");
+			int choice = sc.nextInt();
+			if (choice == 1) {
+				System.out.println("Enter city name");
+				city = sc.next();
+				for (AddressBook addressBook : LLAB) {
+					addressBook.SearchByCity(city);
+				}
+			} else if (choice == 2) {
+				System.out.println("Enter state name");
+				state = sc.next();
+				for (AddressBook addressBook : LLAB) {
+					addressBook.SearchByState(state);
+				}
+			}
 		}
 	}
 }
